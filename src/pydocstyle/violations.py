@@ -83,7 +83,8 @@ class Error:
         if self.explanation:
             self.explanation = '\n'.join(l for l in self.explanation.split('\n')
                                          if not is_blank(l))
-        template = '{filename}:{line} {definition}:\n        {message}'
+        # we really want the actual column number, but this will suffice for now
+        template = '{filename}:{line}:0: {definition}: {message}'
         if self.source and self.explain:
             template += '\n\n{explanation}\n\n{lines}\n'
         elif self.source and not self.explain:
