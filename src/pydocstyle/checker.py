@@ -110,7 +110,8 @@ class ConventionChecker:
             for this_check in self.checks:
                 terminate = False
                 if isinstance(definition, this_check._check_for):
-                    skipping_all = (definition.skipped_error_codes == 'all')
+                    skipping_all = (definition.skipped_error_codes == 'all' or
+                                    module.skipped_error_codes == 'all')
                     decorator_skip = ignore_decorators is not None and any(
                         len(ignore_decorators.findall(dec.name)) > 0
                         for dec in definition.decorators)
@@ -122,7 +123,7 @@ class ConventionChecker:
                     errors = error if hasattr(error, '__iter__') else [error]
                     for error in errors:
                         if error is not None and error.code not in \
-                                definition.skipped_error_codes:
+                                definition.skipped_error_codes + module.skipped_error_codes:
                             partition = this_check.__doc__.partition('.\n')
                             message, _, explanation = partition
                             error.set_context(explanation=explanation,
